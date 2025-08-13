@@ -228,16 +228,18 @@ func _on_menu_item_pressed(id: int, function_name: String, code_edit: CodeEdit, 
 func _on_create_function(function_name: String, code_edit: CodeEdit):
 	code_edit.deselect()
 	
-	var new_function = "\n\nfunc " + function_name + "():\n\tpass"
+	var new_function_string = "\n\nfunc " + function_name + "():\n\tpass"
 	
 	# ensure correct indentation type.
 	var settings = EditorInterface.get_editor_settings()
-	var indentationType = settings.get_setting("text_editor/behavior/indent/type")
+	var indentation_type = settings.get_setting("text_editor/behavior/indent/type")
 	
-	if indentationType != INDENTATION_TYPES.TABS:
-		new_function.replace("\t", " ")
+	if indentation_type != INDENTATION_TYPES.TABS:
+		var indentation_size = settings.get_setting("text_editor/behavior/indent/size")
+		var indenation_string = " ".repeat(indentation_size)
+		new_function_string = new_function_string.replace("\t", indenation_string)
 		
-	code_edit.text = code_edit.text + new_function
+	code_edit.text = code_edit.text + new_function_string
 	
 	var line_count = code_edit.get_line_count()
 	var pass_line = line_count - 1
